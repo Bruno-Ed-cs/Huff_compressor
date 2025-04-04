@@ -1,7 +1,9 @@
 import numpy as np
 import binarytree as btree
 
-string = "entenda meu dilema, espero que este algorítimo funcione" 
+string = """
+aaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbcccccccccccccccc
+"""
 
 
 class NodeHuff(btree.Node):
@@ -11,8 +13,14 @@ class NodeHuff(btree.Node):
         self.left = None
         self.right = None
 
-def encode(node: NodeHuff, char , sequence = None):
+def encode(node: NodeHuff, char, sequence = None):
 
+    """
+    Funçao para codificar recursivamente um caractere
+    :param node: arvore de codificação Huffman
+    :param char: caractere a ser codificado
+    :param sequence: array de bits a ser criado
+    """
     if sequence is None:
         sequence = []
 
@@ -39,7 +47,13 @@ def encode(node: NodeHuff, char , sequence = None):
 
     return None
 
-def decode(tree: NodeHuff, code):
+def decode(tree: NodeHuff, code) -> str:
+
+    """
+    Função para decodificar uma sequencia de Huffman
+    :param tree: arvore codificadora da sequencia
+    :param code: sequencia de bits codificado
+    """
 
     root = tree
     text = ""
@@ -76,13 +90,22 @@ def decode(tree: NodeHuff, code):
 #        
 #
 
-def generate_tree(frequency_array):
+def generate_tree(frequency_array) -> NodeHuff:
+
+    """
+    Função de geracao da arvore codificadora
+    :param frequency_array: array de pares com o caractere e a frequencia na ordem descrita
+    """
 
     node_array = []
 
     for tup in frequency_array:
         node_array.append(NodeHuff(tup[0], tup[1]))
 
+    if len(node_array) == 1:
+        temp = NodeHuff(weight= node_array[0].value)
+        temp.left = node_array.pop()
+        node_array.append(temp)
 
     while len(node_array) > 1:
         print(len(node_array))
@@ -96,18 +119,22 @@ def generate_tree(frequency_array):
 
         node_array.sort(key = lambda node : node.value)
 
+    
 
     tree : NodeHuff = node_array[0]
 
     return tree
 
 
-def char_counter(string):
+def char_counter(string) -> list:
+
+    """
+    Função para gerar o histograma da frequencia dos caracteres
+    :param string: texto em forma de string
+    """
     
-    total = 0
     frequencies = []
     for char in string:
-        total += 1
 
         if not any(char in tup for tup in frequencies):
             frequencies.append([char, 1])
@@ -118,53 +145,56 @@ def char_counter(string):
                     tup[1] += 1
                     break
 
+
     frequencies.sort(key = lambda tup : tup[1])
 
     return frequencies
         
-num =    np.uint8(255)
-bits = bin(num) 
+def tests():
+    num =    np.uint8(255)
+    bits = bin(num) 
 
-print(f"Numero original = {num}")
-print(f"Valor em binário = {bits}")
-print(f"histograma = {char_counter(string)}")
-tree = generate_tree(char_counter(string))
+    print(f"Numero original = {num}")
+    print(f"Valor em binário = {bits}")
+    print(f"histograma = {char_counter(string)}")
+    tree = generate_tree(char_counter(string))
 
-print(tree)
+    print(tree)
 
-print(f"A = {(encode(tree, "a"))}")
-print(f"B = {(encode(tree, "B"))}")
-print(f"C = {(encode(tree, "C"))}")
-print(f"D = {(encode(tree, "D"))}")
+    print(f"A = {(encode(tree, "a"))}")
+    print(f"B = {(encode(tree, "B"))}")
+    print(f"C = {(encode(tree, "C"))}")
+    print(f"D = {(encode(tree, "D"))}")
 
-encoded = []
+    encoded = []
 
-for x in string:
-    
-    result = encode(tree, x)
-#    print(result)
-    if result == None:
-        break
-    #print(gap)
-    encoded += result
+    for x in string:
+        
+        result = encode(tree, x)
+       ### print(result)
+    #    print(result)
+        #print(gap)
+        encoded += result
 
-                    
+                        
 
-n = np.packbits(encoded)
-print(n)
-print(encoded)
-
-
-u: int = 0
-for num in n:
-    u = u << 8 | num
-
-print(bin(u))
+    n = np.packbits(encoded)
+    print(n)
+    print(encoded)
 
 
+    u: int = 0
+    for num in n:
+        u = u << 8 | num
 
-#test = bin(encode(tree, "D"))
+    print(bin(u))
 
-print()
-print(string)
-print(decode(tree, encoded))
+
+
+    #test = bin(encode(tree, "D"))
+
+    print()
+    print(string)
+    print(decode(tree, encoded))
+
+tests()
