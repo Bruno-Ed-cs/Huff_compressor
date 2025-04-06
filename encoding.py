@@ -8,7 +8,7 @@ class NodeHuff(btree.Node):
         self.left = None
         self.right = None
 
-def encode(node: NodeHuff, char, sequence = None):
+def encode_char(node: NodeHuff, char, sequence = None):
 
     """
     Funçao para codificar recursivamente um caractere
@@ -27,20 +27,36 @@ def encode(node: NodeHuff, char, sequence = None):
 
     if node.left != None:
         sequence.append(0)
-        seq = encode(node.left, char, sequence)
+        seq = encode_char(node.left, char, sequence)
         if seq != None:
             return seq
         sequence.pop()
 
     if node.right != None:
         sequence.append(1)
-        seq = encode(node.right, char, sequence)
+        seq = encode_char(node.right, char, sequence)
         if seq != None:
             return seq
         sequence.pop()
 
 
     return None
+
+def encode(string: str, tree: NodeHuff) -> list:
+
+    encoded_sequence = []
+
+    for char in string:
+
+        sequence = encode_char(tree, char)
+        if sequence is None:
+            print(f"ERROR: The character '{char}' cannot be found in the encoding tree")
+
+        else:
+            encoded_sequence.extend(sequence)
+
+    return encoded_sequence
+
 
 def decode(tree: NodeHuff, code) -> str:
 
@@ -66,6 +82,7 @@ def decode(tree: NodeHuff, code) -> str:
             tree = root
 
     return text
+
 
 
 
@@ -98,12 +115,12 @@ def generate_tree(frequency_array) -> NodeHuff:
         node_array.append(NodeHuff(tup[0], tup[1]))
 
     if len(node_array) == 1:
-        temp = NodeHuff(weight= node_array[0].value)
+        temp = NodeHuff(weight= int(node_array[0].value))
         temp.left = node_array.pop()
         node_array.append(temp)
 
     while len(node_array) > 1:
-        print(len(node_array))
+        #print(len(node_array))
         temp = NodeHuff(weight = node_array[0].value + node_array[1].value)
 
 
