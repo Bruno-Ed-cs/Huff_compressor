@@ -142,9 +142,9 @@ def tests():
 
     print(read_header(header))
 
-    compress_file("hello.txt")
+    compress_file("./texts/hello.txt")
 
-    decompress_file("hello.huff")
+    decompress_file("./texts/hello.huff")
 
 
 
