@@ -85,10 +85,10 @@ def tests():
 
     print(tree)
 
-    print(f"A = {(encode_char(tree, "a"))}")
-    print(f"B = {(encode_char(tree, "b"))}")
-    print(f"C = {(encode_char(tree, "c"))}")
-    print(f"D = {(encode_char(tree, "d"))}")
+    print(f"A = {encode_char(tree, "a")}")
+    print(f"B = {encode_char(tree, "b")}")
+    print(f"C = {encode_char(tree, "c")}")
+    print(f"D = {encode_char(tree, "d")}")
 
     encoded = encode(string, tree)
     n = np.packbits(encoded)
