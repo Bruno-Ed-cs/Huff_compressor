@@ -17,6 +17,7 @@ from numpy._core.multiarray import unpackbits
 from numpy._core.numerictypes import uint32
 from encoding import *
 import numpy as np
+import os
 
 
 def construct_header(encoding_length: np.uint32, frequency_array: list) -> bytearray:
@@ -72,11 +73,17 @@ def compress_file(file_path: str, destination_folder: str = "./"):
 
     file_name = file.name
 
+    initial_size = os.path.getsize(file_path)
+
     file_string = file.read()
 
     frequency_array = char_counter(file_string)
 
+    print(f"Histograma de frequência: {frequency_array}")
+
     tree = generate_tree(frequency_array)
+
+    print(f"Árvore geradora:\n{tree}")
 
     encoded = encode(file_string, tree)
 
@@ -86,11 +93,24 @@ def compress_file(file_path: str, destination_folder: str = "./"):
 
     compressed = header + body
 
-    file = open(destination_folder + file_name.removesuffix(".txt") + ".huff", "wb")
-
-    file.write(compressed)
 
     file.close()
+
+    compressed_name = destination_folder + file_name.removesuffix(".txt") + ".huff"
+
+    file = open(compressed_name, "wb")
+
+    #print(compressed_name)
+    file.write(compressed)
+
+
+    file.close()
+
+    final_size = os.path.getsize(compressed_name)
+
+    print(f"Tamanho original = {initial_size} bytes")
+    print(f"Tamanho comprimido = {final_size} bytes")
+    print(f"Taxa de compressão = {(100 - (final_size/initial_size) * 100):.2f} %")
 
 def decompress_file(file_path: str, destination_folder: str = "./"):
 
@@ -108,13 +128,32 @@ def decompress_file(file_path: str, destination_folder: str = "./"):
     unpacked_bits = np.frombuffer(file_bytes[header_size:], np.uint8)
     file_bits = np.unpackbits(unpacked_bits)[:body_size]
 
-    text = decode(generate_tree(frequency_array), file_bits)
+    tree = generate_tree(frequency_array)
+    text = decode(tree, file_bits)
 
     file.close()
 
-    file = open(destination_folder + file_name.removesuffix(".huff") + "(decoded)" + ".txt", "w")
+    decompress_name = destination_folder + file_name.removesuffix(".huff") + "_decoded_" + ".txt"
+    file = open(decompress_name, "w")
 
     file.write(text)
 
     file.close()
+
+    initial_size = os.path.getsize(file_path)
+    final_size = os.path.getsize(decompress_name)
+
+    print(f"Histograma de frequência: {frequency_array}")
+    print(f"Árvore geradora:\n{tree}")
+
+    print(f"Tamanho comprimido = {initial_size} bytes")
+    print(f"Tamanho final = {final_size} bytes")
+    print(f"Taxa de compressão = {(100 - (initial_size/final_size) * 100):.2f} %")
+
+
+
+
+    
+
+
 
