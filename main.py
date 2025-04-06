@@ -10,14 +10,11 @@ def main():
     args = sys.argv
 
     if len(args) <= 1:
-        print("inssuficient arguments")
+        print("inssuficient arguments\nuse -h or --help for help")
         return
 
     if args[1] is None:
-        print("error argument is not vaild")
-        return
-
-    if args[1] == "-h" or args[1] == "--help":
+        print("error argument is not vaild\nuse -h or --help for help")
         return
 
     match args[1]:
@@ -35,20 +32,12 @@ def main():
 
             tests()
 
-        case "-h" "--help":
-            print("""
-            Commad template: program [mode] [compression target] [compression destination]
-
-            -c      Compress arquive
-            -d      Decompress arquive
-            -t      Run test
-            """)
+        case "-h" | "--help":
+            print("Commad template: program [mode] [compression target] [compression destination] \n\n-c      Compress arquive \n-d      Decompress arquive \n-t      Run test ")
 
         case _ :
 
             print("Invalid commad, use -h or --help for help")
-
-
 
 
     return
