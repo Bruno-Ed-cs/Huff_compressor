@@ -5,7 +5,7 @@ from file_handler import *
 def tests():
 
     string = """
-    aaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbcccccccccccccccc"""
+    aaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbccccccccccccccccaaaaaaaaaaaaaaaddddddddddddd"""
 #A lobotomia foi um dos procedimentos cirúrgicos mais cruéis da história da medicina moderna. A ideia parecia simples, mas gerava efeitos colaterais permanentes nos pacientes. Esse vídeo conta a história da lobotomia, o que acontecia com os pacientes e o porquê de termos inventado (e aplicado) uma cirurgia tão bizarra.
 #
 #Se você quer se aventurar no mundo tech ou dar um upgrade na sua carreira, eu recomendo a Alura!
@@ -86,9 +86,9 @@ def tests():
     print(tree)
 
     print(f"A = {(encode_char(tree, "a"))}")
-    print(f"B = {(encode_char(tree, "B"))}")
-    print(f"C = {(encode_char(tree, "C"))}")
-    print(f"D = {(encode_char(tree, "D"))}")
+    print(f"B = {(encode_char(tree, "b"))}")
+    print(f"C = {(encode_char(tree, "c"))}")
+    print(f"D = {(encode_char(tree, "d"))}")
 
     encoded = encode(string, tree)
     n = np.packbits(encoded)
