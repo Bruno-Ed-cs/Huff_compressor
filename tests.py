@@ -132,7 +132,7 @@ def tests():
     print(bin(num))
 
     fa = char_counter(string)
-    header = construct_header(uint32(len(bits)), fa)
+    header = construct_header(np.uint32(len(bits)), fa)
     body = bytearray(np.packbits(encoded))
     
     print(f"header = {header}")
